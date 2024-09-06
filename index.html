@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Kitty Style Panel</title>
+    <!-- Include the CSS styles -->
+    <style>
+        body {
+            background-color: #FFD1DC; /* Pastel pink background */
+            font-family: 'Helvetica', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .panel {
+            background-color: #FFF0F5; /* Light pastel pink */
+            border: 2px solid #FFB6C1;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .panel h1 {
+            color: #FF69B4; /* Hot pink for title */
+            margin-bottom: 20px;
+        }
+
+        .panel input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #FFB6C1;
+            border-radius: 6px;
+        }
+
+        .panel button {
+            background-color: #FFB6C1; /* Light pink button */
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 5px;
+        }
+
+        .panel button:hover {
+            background-color: #FF69B4; /* Hot pink when hovered */
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h1>Hello Kitty Panel</h1>
+        <form id="controlForm">
+            <input type="text" id="urlInput" placeholder="Enter URL" required>
+            <input type="number" id="intervalInput" placeholder="Interval (seconds)" required>
+            <button type="button" onclick="startScript()">Start</button>
+            <button type="button" onclick="stopScript()">Stop</button>
+        </form>
+    </div>
+
+    <script>
+        function startScript() {
+            const url = document.getElementById('urlInput').value;
+            const interval = parseInt(document.getElementById('intervalInput').value);
+
+            if (!url) {
+                alert("Please enter a URL.");
+                return;
+            }
+
+            if (interval <= 0) {
+                alert("Please enter a valid interval.");
+                return;
+            }
+
+            fetch('/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: url, interval: interval })
+            }).then(response => {
+                if (response.ok) {
+                    alert("Script started successfully!");
+                } else {
+                    alert("Error starting script.");
+                }
+            });
+        }
+
+        function stopScript() {
+            fetch('/stop', {
+                method: 'POST'
+            }).then(response => {
+                if (response.ok) {
+                    alert("Script stopped successfully!");
+                } else {
+                    alert("Error stopping script.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
